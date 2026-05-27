@@ -1,0 +1,4 @@
+Account Number,Service Address,Bill Period Start,Bill Period End,Days,kWh Used,Total Charges,Rate Schedule,Meter ID
+3456222222-9,222 Broadway St San Francisco,2024-12-07,2025-01-06,31,864,194.78,E-19,111.00222.333.002
+3456222222-9,222 Broadway St San Francisco,2025-01-07,2025-02-05,30,792,178.50,E-19,111.00222.333.002
+3456333333-0,100 Market St Oakland,2024-11-01,2024-12-20,50,1420,312.00,E-19,222.00333.444.005

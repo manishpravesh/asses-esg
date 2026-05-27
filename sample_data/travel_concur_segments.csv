@@ -1,0 +1,6 @@
+source_system,source_record_id,trip_id,traveler_email,mode,segment_sequence,start_datetime_utc,end_datetime_utc,origin_iata,destination_iata,origin_city,destination_city,distance_km,cabin_class,hotel_nights,passenger_count,amount_usd,booking_status
+concur_itinerary,air-seg-991,T-44821,jane.doe@demo.client.com,air,1,2025-03-12T14:30:00Z,2025-03-12T22:15:00Z,LHR,JFK,London,New York,5570,economy,,1,642.00,confirmed
+concur_itinerary,air-seg-992,T-44821,jane.doe@demo.client.com,air,2,2025-03-15T18:00:00Z,2025-03-16T05:30:00Z,JFK,LHR,New York,London,5570,economy,,1,598.00,confirmed
+concur_itinerary,hotel-seg-441,T-44821,jane.doe@demo.client.com,hotel,1,2025-03-12T00:00:00Z,2025-03-15T00:00:00Z,,,New York,,,,3,,890.00,confirmed
+concur_expense,exp-7721,RPT-9921,bob.smith@demo.client.com,mileage,1,2025-04-02T09:00:00Z,2025-04-02T09:45:00Z,,,San Jose,Palo Alto,32.2,,,,1,18.40,approved
+navan_booking,uuid-c3b1,T-44902,bob.smith@demo.client.com,ground,1,2025-04-01T08:15:00Z,2025-04-01T08:55:00Z,XXX,YYY,San Francisco,San Francisco,,,,,1,48.00,confirmed
