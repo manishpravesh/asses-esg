@@ -4,7 +4,7 @@ Django REST + React prototype that ingests activity/emissions-related data from 
 
 ## Live Demo
 
-- URL: [<your-deployed-url>](https://breatheesg-r44w.onrender.com/)
+- URL: (https://breatheesg-r44w.onrender.com/)
 
 ## Demo credentials
 
