@@ -75,11 +75,11 @@ A Django REST and React app that:
 
 ### The three sources
 
-| # | Source | Real-world challenge |
-|---|--------|----------------------|
-| 1 | **SAP** — fuel and procurement | Inconsistent units, plant codes needing lookup, German headers, odd date formats |
-| 2 | **Utility** — electricity | Portal CSV, PDF, or API; meter readings, tariffs, billing periods not aligned to calendar months |
-| 3 | **Corporate travel** | Flights, hotels, ground transport; airport codes vs distances; different emission factors per category |
+| #   | Source                         | Real-world challenge                                                                                   |
+| --- | ------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| 1   | **SAP** — fuel and procurement | Inconsistent units, plant codes needing lookup, German headers, odd date formats                       |
+| 2   | **Utility** — electricity      | Portal CSV, PDF, or API; meter readings, tariffs, billing periods not aligned to calendar months       |
+| 3   | **Corporate travel**           | Flights, hotels, ground transport; airport codes vs distances; different emission factors per category |
 
 For each source: decide ingestion mechanism (file upload, API pull, manual paste), justify it, research real formats, fabricate realistic sample data.
 
@@ -175,11 +175,11 @@ Paroject/
 
 Research-backed choices for the prototype:
 
-| Source | Real-world format researched | Prototype mechanism | Subset handled | Deliberately ignored |
-|--------|------------------------------|---------------------|----------------|----------------------|
+| Source                     | Real-world format researched                                  | Prototype mechanism                        | Subset handled                                                                                                                   | Deliberately ignored                                                   |
+| -------------------------- | ------------------------------------------------------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | **SAP fuel + procurement** | ME2N (PO/spend) + MB51 (goods movement) ALV→Excel/CSV exports | **File upload** (`.csv`, optional `.xlsx`) | Two profiles: `procurement_spend`, `fuel_activity`; fields: `WERKS`, `BUKRS`, `MATNR`, `MENGE`/`MEINS`, `BUDAT`/`BEDAT`, `KOSTL` | IDoc, OData, IS-U utility billing, invoice accruals, multi-currency FX |
-| **Utility electricity** | PG&E/SCE-style portal monthly CSV (billing period + kWh) | **File upload** | Account #, bill period start/end, total kWh, optional rate schedule, meter ID | PDF bill OCR, Green Button OAuth, 15-min interval data, demand kW |
-| **Corporate travel** | Concur Itinerary v4 segment shape + Navan bookings export | **File upload** | Air/hotel/car/ground/mileage segments; IATA codes; vendor `Miles` when present | Live Concur OAuth, expense↔itinerary join, radiative forcing |
+| **Utility electricity**    | PG&E/SCE-style portal monthly CSV (billing period + kWh)      | **File upload**                            | Account #, bill period start/end, total kWh, optional rate schedule, meter ID                                                    | PDF bill OCR, Green Button OAuth, 15-min interval data, demand kW      |
+| **Corporate travel**       | Concur Itinerary v4 segment shape + Navan bookings export     | **File upload**                            | Air/hotel/car/ground/mileage segments; IATA codes; vendor `Miles` when present                                                   | Live Concur OAuth, expense↔itinerary join, radiative forcing           |
 
 **Why file upload for all three:** Sustainability teams receive exports from IT/facilities, not raw APIs. Proves normalization + review UX without 1–2 days of OAuth plumbing. Document API path as Phase 2 in `DECISIONS.md`.
 
@@ -187,24 +187,24 @@ Research-backed choices for the prototype:
 
 **Procurement spend (ME2N-style)** — Scope 3 Cat 1 proxy:
 
-| Concept | SAP fields | Example |
-|---------|------------|---------|
-| PO / line | `EBELN`, `EBELP` | `4500123456`, `00010` |
-| Company / plant | `BUKRS`, `WERKS` | `1000`, `DE01` |
-| Material | `MATNR`, `TXZ01`, `MATKL` | Diesel EN590, `FUEL` |
-| Quantity / UoM | `MENGE`, `MEINS` | `12500.000`, `L` |
-| Value | `NETWR`, `WAERS` | `18750.00`, `EUR` |
-| Dates | `BEDAT`, `EINDT` | `20250315` |
+| Concept         | SAP fields                | Example               |
+| --------------- | ------------------------- | --------------------- |
+| PO / line       | `EBELN`, `EBELP`          | `4500123456`, `00010` |
+| Company / plant | `BUKRS`, `WERKS`          | `1000`, `DE01`        |
+| Material        | `MATNR`, `TXZ01`, `MATKL` | Diesel EN590, `FUEL`  |
+| Quantity / UoM  | `MENGE`, `MEINS`          | `12500.000`, `L`      |
+| Value           | `NETWR`, `WAERS`          | `18750.00`, `EUR`     |
+| Dates           | `BEDAT`, `EINDT`          | `20250315`            |
 
 **Fuel activity (MB51-style)** — Scope 1:
 
-| Concept | SAP fields | Example |
-|---------|------------|---------|
-| Document | `MBLNR`, `MJAHR`, `ZEILE` | goods movement line |
-| Plant | `WERKS`, `LGORT` | `1000`, `FUEL` |
-| Movement | `BWART` | `201` (goods issue) |
-| Quantity | `MENGE`, `MEINS` | `8500`, `L` |
-| Posting date | `BUDAT` | `20250331` |
+| Concept      | SAP fields                | Example             |
+| ------------ | ------------------------- | ------------------- |
+| Document     | `MBLNR`, `MJAHR`, `ZEILE` | goods movement line |
+| Plant        | `WERKS`, `LGORT`          | `1000`, `FUEL`      |
+| Movement     | `BWART`                   | `201` (goods issue) |
+| Quantity     | `MENGE`, `MEINS`          | `8500`, `L`         |
+| Posting date | `BUDAT`                   | `20250331`          |
 
 ### Utility detail (portal CSV)
 
@@ -340,11 +340,11 @@ erDiagram
 
 ### Django apps
 
-| App | Responsibility |
-|-----|------------------|
-| `core` | `Organization`, `Site`, custom user, tenant middleware |
-| `ingestion` | Upload endpoint, batch processing, three parsers + normalizers |
-| `activities` | `ActivityRecord`, review actions, audit, dashboard stats API |
+| App          | Responsibility                                                 |
+| ------------ | -------------------------------------------------------------- |
+| `core`       | `Organization`, `Site`, custom user, tenant middleware         |
+| `ingestion`  | Upload endpoint, batch processing, three parsers + normalizers |
+| `activities` | `ActivityRecord`, review actions, audit, dashboard stats API   |
 
 ### API endpoints
 
@@ -366,11 +366,11 @@ GET    /api/v1/auth/me/
 
 Create in `sample_data/`:
 
-| File | Purpose |
-|------|---------|
-| `sap_procurement_me2n.csv` | Mixed EN/DE headers; tests header mapping |
-| `sap_fuel_mb51.csv` | Movement types 201/261; liters + kg units |
-| `utility_pge_monthly.csv` | Account, bill period, kWh, rate schedule `E-19` |
+| File                         | Purpose                                         |
+| ---------------------------- | ----------------------------------------------- |
+| `sap_procurement_me2n.csv`   | Mixed EN/DE headers; tests header mapping       |
+| `sap_fuel_mb51.csv`          | Movement types 201/261; liters + kg units       |
+| `utility_pge_monthly.csv`    | Account, bill period, kWh, rate schedule `E-19` |
 | `travel_concur_segments.csv` | Air legs with IATA, hotel, mileage without IATA |
 
 Include one intentionally messy row per source (wrong date format, stripped leading zeros on plant code).
@@ -388,13 +388,13 @@ Include one intentionally messy row per source (wrong date format, stripped lead
 
 ### Pages (analyst-first UX)
 
-| Route | Page | Features |
-|-------|------|----------|
-| `/login` | Login | Pre-seeded analyst + admin users |
-| `/` | Dashboard | KPI cards, recent batches, source/date filters |
-| `/upload` | Upload | Source type selector, drag-drop CSV, validation feedback |
-| `/review` | Review queue | Tabs: All / Pending / Flagged / Failed / Approved; bulk approve |
-| `/review/:id` | Row detail | Raw vs normalized side-by-side, flag reasons, audit timeline |
+| Route         | Page         | Features                                                        |
+| ------------- | ------------ | --------------------------------------------------------------- |
+| `/login`      | Login        | Pre-seeded analyst + admin users                                |
+| `/`           | Dashboard    | KPI cards, recent batches, source/date filters                  |
+| `/upload`     | Upload       | Source type selector, drag-drop CSV, validation feedback        |
+| `/review`     | Review queue | Tabs: All / Pending / Flagged / Failed / Approved; bulk approve |
+| `/review/:id` | Row detail   | Raw vs normalized side-by-side, flag reasons, audit timeline    |
 
 **UX principles:** Plain labels ("Electricity — Scope 2", not internal enums). Color-coded status. No empty CRUD screens.
 
@@ -413,12 +413,12 @@ gunicorn config.wsgi:application
 
 ## Documentation deliverables
 
-| File | Contents |
-|------|----------|
-| `docs/MODEL.md` | ER diagram, field glossary, tenancy scoping, scope mapping rules, audit semantics, unit normalization table |
+| File                | Contents                                                                                                                                                                                                         |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `docs/MODEL.md`     | ER diagram, field glossary, tenancy scoping, scope mapping rules, audit semantics, unit normalization table                                                                                                      |
 | `docs/DECISIONS.md` | SAP=ME2N/MB51 CSV not OData; utility=portal CSV not PDF; travel=itinerary segments not expense reports; sync not async; PM questions (plant master data owner? fiscal vs calendar period? approval granularity?) |
-| `docs/TRADEOFFS.md` | Three explicit non-builds: (1) live API integrations, (2) PDF/OCR utility ingestion, (3) full emission factor engine |
-| `docs/SOURCES.md` | Per source: researched formats, sample column rationale, what breaks at scale |
+| `docs/TRADEOFFS.md` | Three explicit non-builds: (1) live API integrations, (2) PDF/OCR utility ingestion, (3) full emission factor engine                                                                                             |
+| `docs/SOURCES.md`   | Per source: researched formats, sample column rationale, what breaks at scale                                                                                                                                    |
 
 Reference standards: GHG Protocol Scope 3 Cat 6, Green Button ESPI, SAP ME2N/MB51 field names, Concur Itinerary v4 segment fields.
 
@@ -478,50 +478,50 @@ Reference standards: GHG Protocol Scope 3 Cat 6, Green Button ESPI, SAP ME2N/MB5
 
 ## Implementation todos
 
-| ID | Task | Status |
-|----|------|--------|
-| `scaffold` | Scaffold monorepo: Django backend, React/Vite frontend, Docker Compose Postgres, render.yaml | Pending |
-| `data-model` | Implement core models + MODEL.md v1 | Pending |
-| `sap-ingest` | Build SAP ME2N + MB51 CSV parsers with date/unit normalization and sample fixtures | Pending |
-| `utility-travel-ingest` | Build utility portal CSV + travel segment CSV parsers with IATA distance fallback | Pending |
-| `review-api` | Implement REST API: upload, dashboard stats, review queue, approve/flag/bulk-approve + audit | Pending |
-| `react-dashboard` | Build React analyst UI: login, dashboard, upload, review queue, row detail | Pending |
-| `docs` | Write DECISIONS.md, TRADEOFFS.md, SOURCES.md | Pending |
-| `deploy` | Deploy to Render, seed demo data, smoke test live URL, finalize README | Pending |
+| ID                      | Task                                                                                         | Status  |
+| ----------------------- | -------------------------------------------------------------------------------------------- | ------- |
+| `scaffold`              | Scaffold monorepo: Django backend, React/Vite frontend, Docker Compose Postgres, render.yaml | Pending |
+| `data-model`            | Implement core models + MODEL.md v1                                                          | Pending |
+| `sap-ingest`            | Build SAP ME2N + MB51 CSV parsers with date/unit normalization and sample fixtures           | Pending |
+| `utility-travel-ingest` | Build utility portal CSV + travel segment CSV parsers with IATA distance fallback            | Pending |
+| `review-api`            | Implement REST API: upload, dashboard stats, review queue, approve/flag/bulk-approve + audit | Pending |
+| `react-dashboard`       | Build React analyst UI: login, dashboard, upload, review queue, row detail                   | Pending |
+| `docs`                  | Write DECISIONS.md, TRADEOFFS.md, SOURCES.md                                                 | Pending |
+| `deploy`                | Deploy to Render, seed demo data, smoke test live URL, finalize README                       | Pending |
 
 ---
 
 ## Testing strategy
 
-| Type | Scope |
-|------|-------|
+| Type           | Scope                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------- |
 | **Unit tests** | Each parser against sample fixtures + edge cases (German headers, date formats, missing plant) |
-| **API tests** | Upload → list activities → approve → verify locked + audit event |
-| **Manual QA** | 15-minute analyst walkthrough documented in README |
-| **Skip** | E2E Playwright; full emission calculation tests |
+| **API tests**  | Upload → list activities → approve → verify locked + audit event                               |
+| **Manual QA**  | 15-minute analyst walkthrough documented in README                                             |
+| **Skip**       | E2E Playwright; full emission calculation tests                                                |
 
 ---
 
 ## Grading alignment
 
-| Weight | Criterion | How this plan addresses it |
-|--------|-----------|------------------------------|
-| 35% | Data model quality | Rich canonical model, provenance, audit, scope mapping, unit normalization |
-| 25% | Decision defense | Four docs + realistic source subset choices with named SAP/utility/travel formats |
-| 20% | Realistic source handling | ME2N/MB51, PG&E-style CSV, Concur segment CSV — not toy 3-column files |
-| 10% | Analyst UX | Review queue, flags in plain English, raw vs normalized detail, bulk approve |
-| 10% | What you chose not to build | Explicit three non-builds in TRADEOFFS.md with reasoning |
+| Weight | Criterion                   | How this plan addresses it                                                        |
+| ------ | --------------------------- | --------------------------------------------------------------------------------- |
+| 35%    | Data model quality          | Rich canonical model, provenance, audit, scope mapping, unit normalization        |
+| 25%    | Decision defense            | Four docs + realistic source subset choices with named SAP/utility/travel formats |
+| 20%    | Realistic source handling   | ME2N/MB51, PG&E-style CSV, Concur segment CSV — not toy 3-column files            |
+| 10%    | Analyst UX                  | Review queue, flags in plain English, raw vs normalized detail, bulk approve      |
+| 10%    | What you chose not to build | Explicit three non-builds in TRADEOFFS.md with reasoning                          |
 
 ---
 
 ## Risk mitigations
 
-| Risk | Mitigation |
-|------|------------|
-| Deployment eats Day 4 | Deploy to Render on Day 3 evening with minimal seed; Day 4 is polish only |
-| Scope creep | No OAuth, no PDF, no Celery — enforce in TRADEOFFS.md |
-| Over-engineered UI | Three pages + detail view; Tailwind defaults |
-| Cannot explain AI code | Write MODEL.md first; parsers are small, test-covered modules |
+| Risk                   | Mitigation                                                                |
+| ---------------------- | ------------------------------------------------------------------------- |
+| Deployment eats Day 4  | Deploy to Render on Day 3 evening with minimal seed; Day 4 is polish only |
+| Scope creep            | No OAuth, no PDF, no Celery — enforce in TRADEOFFS.md                     |
+| Over-engineered UI     | Three pages + detail view; Tailwind defaults                              |
+| Cannot explain AI code | Write MODEL.md first; parsers are small, test-covered modules             |
 
 ---
 
@@ -539,4 +539,4 @@ Reply to the assignment email with:
 
 ---
 
-*Document version: 1.0*
+_Document version: 1.0_
